@@ -1,0 +1,244 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "gnetId": null,
+    "graphTooltip": 0,
+    "id": 1,
+    "links": [],
+    "panels": [
+      {
+        "title": "Social Media Sentiment Analysis",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "targets": [
+          {
+            "format": "time_series",
+            "group": [],
+            "metricColumn": "none",
+            "rawQuery": true,
+            "rawSql": "SELECT\n  timestamp AS time,\n  platform,\n  avg_sentiment\nFROM sentiment_analysis\nWHERE $__timeFilter(timestamp)\nORDER BY timestamp ASC",
+            "refId": "A"
+          }
+        ],
+        "type": "timeseries",
+        "datasource": "PostgreSQL"
+      },
+      {
+        "title": "E-commerce Event Distribution",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        },
+        "id": 2,
+        "options": {
+          "displayMode": "gradient",
+          "orientation": "horizontal",
+          "text": { }
+        },
+        "targets": [
+          {
+            "format": "time_series",
+            "group": [],
+            "metricColumn": "none",
+            "rawQuery": true,
+            "rawSql": "SELECT\n  timestamp AS time,\n  event_type,\n  COUNT(*) as count\nFROM user_behavior\nWHERE $__timeFilter(timestamp)\nGROUP BY timestamp, event_type\nORDER BY timestamp ASC",
+            "refId": "A"
+          }
+        ],
+        "type": "bargauge",
+        "datasource": "MongoDB"
+      },
+      {
+        "title": "Kafka Metrics",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 8
+        },
+        "id": 3,
+        "targets": [
+          {
+            "expr": "kafka_server_brokertopicmetrics_messagesinpersec_oneminuterate",
+            "format": "time_series",
+            "instant": false,
+            "interval": "",
+            "legendFormat": "Messages/sec",
+            "refId": "A"
+          }
+        ],
+        "type": "graph",
+        "datasource": "Prometheus"
+      },
+      {
+        "title": "Spark Streaming Statistics",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 8
+        },
+        "id": 4,
+        "options": {
+          "showHeader": true
+        },
+        "targets": [
+          {
+            "expr": "spark_streaming_statistics",
+            "format": "table",
+            "instant": true,
+            "refId": "A"
+          }
+        ],
+        "type": "table",
+        "datasource": "Prometheus"
+      },
+      {
+        "title": "System Resources",
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 16
+        },
+        "id": 5,
+        "panels": [
+          {
+            "title": "CPU Usage",
+            "gridPos": {
+              "h": 8,
+              "w": 8,
+              "x": 0,
+              "y": 0
+            },
+            "id": 6,
+            "targets": [
+              {
+                "expr": "rate(process_cpu_seconds_total[1m])",
+                "refId": "A"
+              }
+            ],
+            "type": "gauge",
+            "datasource": "Prometheus"
+          },
+          {
+            "title": "Memory Usage",
+            "gridPos": {
+              "h": 8,
+              "w": 8,
+              "x": 8,
+              "y": 0
+            },
+            "id": 7,
+            "targets": [
+              {
+                "expr": "process_resident_memory_bytes",
+                "refId": "A"
+              }
+            ],
+            "type": "gauge",
+            "datasource": "Prometheus"
+          },
+          {
+            "title": "Disk Usage",
+            "gridPos": {
+              "h": 8,
+              "w": 8,
+              "x": 16,
+              "y": 0
+            },
+            "id": 8,
+            "targets": [
+              {
+                "expr": "node_filesystem_usage_bytes",
+                "refId": "A"
+              }
+            ],
+            "type": "gauge",
+            "datasource": "Prometheus"
+          }
+        ],
+        "type": "row"
+      }
+    ],
+    "refresh": "5s",
+    "schemaVersion": 30,
+    "style": "dark",
+    "tags": ["streaming", "kafka", "spark"],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "All",
+            "value": "$__all"
+          },
+          "description": null,
+          "error": null,
+          "hide": 0,
+          "includeAll": true,
+          "label": "Platform",
+          "multi": false,
+          "name": "platform",
+          "options": [],
+          "query": "SELECT DISTINCT platform FROM sentiment_analysis",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ]
+    },
+    "timezone": "browser",
+    "title": "Streaming Pipeline Dashboard",
+    "uid": "streaming_pipeline",
+    "version": 1
+  }

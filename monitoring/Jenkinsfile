@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+    
+    environment {
+        DOCKER_HUB_CREDS = credentials('docker-hub-credentials')
+        GIT_CREDS = credentials('git-credentials')
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Build Docker Images') {
+            steps {
+                script {
+                    docker.build("streaming-pipeline:${env.BUILD_NUMBER}")
+                }
+            }
+        }
+        
+        stage('Run Tests') {
+            steps {
+                sh 'python -m pytest tests/'
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                        docker.image("streaming-pipeline:${env.BUILD_NUMBER}").push()
+                    }
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}

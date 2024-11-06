@@ -1,0 +1,38 @@
+# Project Structure
+.
+├── docker-compose.yml
+├── Dockerfile
+├── requirements.txt
+├── .env
+├── src/
+│   ├── producers/
+│   │   ├── __init__.py
+│   │   ├── social_media_producer.py
+│   │   └── ecommerce_producer.py
+│   ├── processors/
+│   │   ├── __init__.py
+│   │   ├── sentiment_analyzer.py
+│   │   └── user_behavior_processor.py
+│   ├── consumers/
+│   │   ├── __init__.py
+│   │   └── data_consumer.py
+│   └── utils/
+│       ├── __init__.py
+│       └── helpers.py
+├── airflow/
+│   ├── dags/
+│   │   └── streaming_pipeline_dag.py
+│   └── plugins/
+│       └── custom_operators.py
+├── spark/
+│   └── streaming_job.py
+├── flink/
+│   └── streaming_job.py
+├── config/
+│   ├── kafka_config.yml
+│   └── spark_config.yml
+└── monitoring/
+    ├── grafana_dashboards/
+    │   └── streaming_dashboard.json
+    └── prometheus/
+        └── prometheus.yml
